@@ -1,0 +1,208 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}Contact - Angie{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    .gradient-text {
+        background: linear-gradient(45deg, #00f5ff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .contact-hero {
+        padding: 6rem 0 4rem;
+        text-align: center;
+    }
+
+    .contact-title {
+        font-size: 4rem;
+        font-weight: 700;
+        font-family: 'Space Grotesk', sans-serif;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .contact-subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 3rem;
+    }
+
+    .contact-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .success-message {
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        color: #00f5ff;
+        padding: 1.25rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .contact-form {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 3rem;
+        border-radius: 24px;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.95rem;
+    }
+
+    .form-input,
+    .form-textarea {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        transition: all 0.3s;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: #00f5ff;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
+    }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 150px;
+    }
+
+    .submit-button {
+        width: 100%;
+        background: linear-gradient(135deg, #00f5ff, #ff00ff);
+        color: white;
+        padding: 1.25rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .submit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 245, 255, 0.4);
+    }
+
+    .alternative-contact {
+        margin-top: 3rem;
+        text-align: center;
+        padding: 2.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+    }
+
+    .alternative-contact p {
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 1rem;
+    }
+
+    .alternative-contact a {
+        color: #00f5ff;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+
+    .alternative-contact a:hover {
+        color: #ff00ff;
+    }
+
+    @media (max-width: 768px) {
+        .contact-title {
+            font-size: 2.5rem;
+        }
+
+        .contact-form {
+            padding: 2rem;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="contact-hero">
+        <h1 class="contact-title">
+            Let's Work <span class="gradient-text">Together</span>
+        </h1>
+        <p class="contact-subtitle">
+            Have a project in mind? Fill out the form below and I'll get back to you within 24 hours.
+        </p>
+    </div>
+
+    <div class="contact-container">
+        <!-- Success Message -->
+        {% if messages %}
+            {% for message in messages %}
+            <div class="success-message">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Contact Form -->
+        <form method="POST" class="contact-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label">Your Name</label>
+                <input type="text" name="name" required class="form-input" placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" required class="form-input" placeholder="john@example.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Subject</label>
+                <input type="text" name="subject" required class="form-input" placeholder="Project Inquiry">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Message</label>
+                <textarea name="message" required class="form-textarea" placeholder="Tell me about your project..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-button">
+                Send Message
+            </button>
+        </form>
+
+        <!-- Alternative Contact -->
+        <div class="alternative-contact">
+            <p>Prefer email?</p>
+            <a href="mailto:hello@example.com">hello@example.com</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

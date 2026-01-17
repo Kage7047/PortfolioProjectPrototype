@@ -1,0 +1,484 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}Portfolio - Angie{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+    body {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        color: #ffffff;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .container {
+        max-width: 1400px;
+    }
+
+    /* Animated gradient text */
+    .gradient-text {
+        background: linear-gradient(45deg, #00f5ff, #ff00ff, #00f5ff);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 4s ease infinite;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .project-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        display: flex;
+        gap: 0;
+        margin-bottom: 3rem;
+        text-decoration: none;
+        color: inherit;
+        position: relative;
+    }
+
+    .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 24px;
+        padding: 2px;
+        background: linear-gradient(45deg, transparent, rgba(0, 245, 255, 0.3), transparent);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    .project-card:hover::before {
+        opacity: 1;
+    }
+
+    .project-card:hover {
+        transform: translateY(-8px) scale(1.01);
+        box-shadow: 0 20px 60px rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.3);
+    }
+
+    .project-image-container {
+        position: relative;
+        width: 55%;
+        min-height: 500px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
+    }
+
+    .project-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: scale(1.05);
+    }
+
+    .project-image.active {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .project-card:hover .project-image {
+        transform: scale(1.08);
+    }
+
+    .project-info {
+        width: 45%;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    }
+
+    .project-number {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        font-size: 5rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.05);
+        font-family: 'Space Grotesk', sans-serif;
+        line-height: 1;
+    }
+
+    .project-category {
+        display: inline-block;
+        background: linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(255, 0, 255, 0.15));
+        color: #00f5ff;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        margin-bottom: 1.5rem;
+        width: fit-content;
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    .project-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #ffffff;
+        font-family: 'Space Grotesk', sans-serif;
+        line-height: 1.2;
+    }
+
+    .project-client {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+
+    .project-description {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+    }
+
+    .project-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #00f5ff;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: gap 0.3s;
+    }
+
+    .project-card:hover .project-cta {
+        gap: 1.2rem;
+    }
+
+    .carousel-indicator {
+        position: absolute;
+        bottom: 2rem;
+        left: 2rem;
+        display: flex;
+        gap: 0.6rem;
+        z-index: 10;
+    }
+
+    .indicator-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transition: all 0.3s;
+    }
+
+    .indicator-dot.active {
+        background: #00f5ff;
+        box-shadow: 0 0 10px #00f5ff;
+        width: 30px;
+        border-radius: 5px;
+    }
+
+    /* Filter Buttons */
+    .filter-btn {
+        padding: 0.65rem 1.75rem;
+        border-radius: 30px;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-weight: 500;
+        font-size: 0.95rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .filter-btn:hover {
+        border-color: rgba(0, 245, 255, 0.5);
+        background: rgba(0, 245, 255, 0.1);
+        color: #00f5ff;
+        transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(135deg, #00f5ff, #ff00ff);
+        border-color: transparent;
+        color: #ffffff;
+        box-shadow: 0 5px 20px rgba(0, 245, 255, 0.4);
+    }
+
+    /* Hero Section */
+    .hero-title {
+        font-size: 4.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 700px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+    }
+
+    /* Floating shapes background */
+    .floating-shapes {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.15;
+        animation: float 20s infinite;
+    }
+
+    .shape1 {
+        width: 400px;
+        height: 400px;
+        background: #00f5ff;
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .shape2 {
+        width: 300px;
+        height: 300px;
+        background: #ff00ff;
+        top: 60%;
+        right: 10%;
+        animation-delay: 5s;
+    }
+
+    .shape3 {
+        width: 350px;
+        height: 350px;
+        background: #00ff88;
+        bottom: 10%;
+        left: 50%;
+        animation-delay: 10s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(30px, -30px) rotate(120deg); }
+        66% { transform: translate(-20px, 20px) rotate(240deg); }
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 1;
+    }
+
+    @media (max-width: 968px) {
+        .project-card {
+            flex-direction: column;
+        }
+
+        .project-image-container,
+        .project-info {
+            width: 100%;
+        }
+
+        .project-image-container {
+            min-height: 350px;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .project-title {
+            font-size: 2rem;
+        }
+
+        .project-number {
+            font-size: 3rem;
+        }
+    }
+</style>
+
+<!-- Floating background shapes -->
+<div class="floating-shapes">
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+</div>
+
+<div class="container content-wrapper">
+    <header style="padding: 6rem 0 4rem; text-align: center;">
+        <h1 class="hero-title">
+            Crafting Visual Stories<br>
+            <span class="gradient-text">Through Design</span>
+        </h1>
+        <p class="hero-subtitle">
+            Graphic designer specializing in brand identity, UI/UX, and print design.<br>
+            Creating meaningful experiences that resonate.
+        </p>
+    </header>
+
+    <section style="margin: 3rem 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
+            <h2 style="font-size: 2.5rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; margin: 0;">
+                Selected Work
+            </h2>
+
+            <!-- Filter Buttons -->
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="{% url 'home' %}"
+                   class="filter-btn {% if not selected_category %}active{% endif %}">
+                    All
+                </a>
+                <a href="?category=branding"
+                   class="filter-btn {% if selected_category == 'branding' %}active{% endif %}">
+                    Branding
+                </a>
+                <a href="?category=ui-ux"
+                   class="filter-btn {% if selected_category == 'ui-ux' %}active{% endif %}">
+                    UI/UX
+                </a>
+                <a href="?category=print"
+                   class="filter-btn {% if selected_category == 'print' %}active{% endif %}">
+                    Print
+                </a>
+            </div>
+        </div>
+
+        <!-- Project List -->
+        <div>
+            {% for project in projects %}
+            <a href="{% url 'project_detail' project.id %}" class="project-card" data-project-id="{{ project.id }}">
+                <div class="project-image-container">
+                    <!-- Main Image -->
+                    <img src="{{ project.main_image.url }}"
+                         alt="{{ project.title }}"
+                         class="project-image active"
+                         data-image-index="0">
+
+                    <!-- Gallery Images -->
+                    {% for img in project.gallery_images.all %}
+                    <img src="{{ img.image.url }}"
+                         alt="{{ img.caption }}"
+                         class="project-image"
+                         data-image-index="{{ forloop.counter }}">
+                    {% endfor %}
+
+                    <!-- Carousel Indicators -->
+                    {% if project.gallery_images.all %}
+                    <div class="carousel-indicator">
+                        <span class="indicator-dot active"></span>
+                        {% for img in project.gallery_images.all %}
+                        <span class="indicator-dot"></span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="project-info">
+                    <span class="project-number">0{{ forloop.counter }}</span>
+                    <span class="project-category">{{ project.get_category_display }}</span>
+                    <h3 class="project-title">{{ project.title }}</h3>
+                    {% if project.client %}
+                    <p class="project-client">Client: {{ project.client }}</p>
+                    {% endif %}
+                    <p class="project-description">{{ project.description|truncatewords:30 }}</p>
+                    <span class="project-cta">
+                        View Case Study
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </div>
+            </a>
+            {% empty %}
+            <div style="text-align: center; padding: 5rem; background: rgba(255, 255, 255, 0.03); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 1.2rem; margin-bottom: 1rem;">No projects yet!</p>
+                <p style="color: rgba(255, 255, 255, 0.4);">Add your first project in the <a href="/admin/" style="color: #00f5ff;">admin panel</a>.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const projectCards = document.querySelectorAll('.project-card');
+
+    projectCards.forEach(card => {
+        const imageContainer = card.querySelector('.project-image-container');
+        const images = card.querySelectorAll('.project-image');
+        const indicators = card.querySelectorAll('.indicator-dot');
+
+        let currentIndex = 0;
+        let intervalId = null;
+
+        if (images.length > 1) {
+
+            function showImage(index) {
+                images.forEach(img => img.classList.remove('active'));
+                indicators.forEach(dot => dot.classList.remove('active'));
+
+                images[index].classList.add('active');
+                if (indicators[index]) {
+                    indicators[index].classList.add('active');
+                }
+            }
+
+            function nextImage() {
+                currentIndex = (currentIndex + 1) % images.length;
+                showImage(currentIndex);
+            }
+
+            function startCarousel() {
+                intervalId = setInterval(nextImage, 2500);
+            }
+
+            function stopCarousel() {
+                if (intervalId) {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                }
+                currentIndex = 0;
+                showImage(0);
+            }
+
+            card.addEventListener('mouseenter', startCarousel);
+            card.addEventListener('mouseleave', stopCarousel);
+        }
+    });
+});
+</script>
+{% endblock %}

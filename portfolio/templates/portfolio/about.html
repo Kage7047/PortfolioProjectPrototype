@@ -1,0 +1,233 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}About - Angie{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    .gradient-text {
+        background: linear-gradient(45deg, #00f5ff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .about-hero {
+        padding: 6rem 0 4rem;
+        text-align: center;
+    }
+
+    .about-title {
+        font-size: 4rem;
+        font-weight: 700;
+        font-family: 'Space Grotesk', sans-serif;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .about-content {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .about-section {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+    }
+
+    .about-text {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1.5rem;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .skill-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .skill-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #00f5ff, #ff00ff);
+        transform: scaleX(0);
+        transition: transform 0.3s;
+    }
+
+    .skill-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .skill-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(0, 245, 255, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
+    }
+
+    .skill-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .skill-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .skill-desc {
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.6;
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(255, 0, 255, 0.1));
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 24px;
+        padding: 4rem;
+        text-align: center;
+        margin-top: 4rem;
+    }
+
+    .cta-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .cta-text {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #00f5ff, #ff00ff);
+        color: white;
+        padding: 1rem 3rem;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 245, 255, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .about-title {
+            font-size: 2.5rem;
+        }
+
+        .about-section {
+            padding: 2rem;
+        }
+
+        .cta-section {
+            padding: 2.5rem 1.5rem;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="about-hero">
+        <h1 class="about-title">
+            Designing <span class="gradient-text">Experiences</span><br>
+            That Matter
+        </h1>
+    </div>
+
+    <div class="about-content">
+        <div class="about-section">
+            <p class="about-text">
+                I'm a passionate graphic designer with a love for clean aesthetics and meaningful design.
+                My work focuses on creating visual identities that resonate with audiences and solve real problems.
+            </p>
+
+            <p class="about-text">
+                With experience in brand design, digital interfaces, and print media, I bring a versatile
+                approach to every project. I believe great design is invisible—it just works. Each project
+                is an opportunity to push boundaries and create something that not only looks beautiful but
+                serves a purpose.
+            </p>
+
+            <p class="about-text">
+                When I'm not designing, you'll find me exploring new design trends, sketching ideas,
+                or hunting for the perfect coffee shop to work from.
+            </p>
+        </div>
+
+        <h2 style="font-size: 2.5rem; font-weight: 700; margin: 4rem 0 2rem; font-family: 'Space Grotesk', sans-serif;">
+            What I Do
+        </h2>
+
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">🎨</div>
+                <h3 class="skill-title">Brand Identity</h3>
+                <p class="skill-desc">
+                    Creating cohesive visual systems that tell your brand's story. From logos to
+                    complete brand guidelines that make an impact.
+                </p>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon">💻</div>
+                <h3 class="skill-title">UI/UX Design</h3>
+                <p class="skill-desc">
+                    Designing intuitive interfaces that users love. Crafting experiences that are
+                    both beautiful and functional across web and mobile.
+                </p>
+            </div>
+
+            <div class="skill-card">
+                <div class="skill-icon">📐</div>
+                <h3 class="skill-title">Print Design</h3>
+                <p class="skill-desc">
+                    From editorial layouts to packaging, bringing ideas to life in physical form.
+                    Attention to detail that translates perfectly to print.
+                </p>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 class="cta-title">Let's Create Something Amazing</h2>
+            <p class="cta-text">
+                Have a project in mind? I'm always excited to hear about new opportunities
+                and collaborate with passionate people.
+            </p>
+            <a href="{% url 'contact' %}" class="cta-button">
+                Get in Touch
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

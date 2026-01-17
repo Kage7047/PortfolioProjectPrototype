@@ -1,0 +1,279 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}{{ project.title }} - Portfolio{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    .gradient-text {
+        background: linear-gradient(45deg, #00f5ff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        margin-bottom: 3rem;
+        transition: all 0.3s;
+        font-weight: 500;
+    }
+
+    .back-button:hover {
+        color: #00f5ff;
+        transform: translateX(-5px);
+    }
+
+    .project-header {
+        max-width: 1000px;
+        margin: 0 auto 4rem;
+    }
+
+    .project-title-detail {
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        font-family: 'Space Grotesk', sans-serif;
+        line-height: 1.2;
+    }
+
+    .project-meta {
+        display: flex;
+        gap: 3rem;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .meta-label {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .meta-value {
+        color: #ffffff;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+
+    .meta-value a {
+        color: #00f5ff;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .meta-value a:hover {
+        color: #ff00ff;
+    }
+
+    .main-image-container {
+        width: 100%;
+        border-radius: 24px;
+        overflow: hidden;
+        margin-bottom: 4rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .main-image-container img {
+        width: 100%;
+        display: block;
+    }
+
+    .description-section {
+        max-width: 900px;
+        margin: 0 auto 5rem;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 3rem;
+        border-radius: 24px;
+    }
+
+    .description-section h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .description-section p {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.8;
+        font-size: 1.1rem;
+        white-space: pre-line;
+    }
+
+    .gallery-section {
+        margin-bottom: 5rem;
+    }
+
+    .gallery-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+
+    .gallery-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s;
+    }
+
+    .gallery-item:hover {
+        transform: translateY(-5px);
+        border-color: rgba(0, 245, 255, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .gallery-caption {
+        padding: 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(255, 0, 255, 0.1));
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        padding: 4rem;
+        border-radius: 24px;
+        text-align: center;
+    }
+
+    .cta-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .cta-section p {
+        margin-bottom: 2rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #00f5ff, #ff00ff);
+        color: white;
+        padding: 1.25rem 3rem;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 245, 255, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .project-title-detail {
+            font-size: 2.5rem;
+        }
+
+        .description-section,
+        .cta-section {
+            padding: 2rem;
+        }
+
+        .gallery-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="container" style="padding: 3rem 5%;">
+    <!-- Back Button -->
+    <a href="{% url 'home' %}" class="back-button">
+        ← Back to Portfolio
+    </a>
+
+    <!-- Project Header -->
+    <div class="project-header">
+        <h1 class="project-title-detail">{{ project.title }}</h1>
+
+        <div class="project-meta">
+            <div class="meta-item">
+                <p class="meta-label">Category</p>
+                <p class="meta-value">{{ project.get_category_display }}</p>
+            </div>
+            {% if project.client %}
+            <div class="meta-item">
+                <p class="meta-label">Client</p>
+                <p class="meta-value">{{ project.client }}</p>
+            </div>
+            {% endif %}
+            {% if project.project_url %}
+            <div class="meta-item">
+                <p class="meta-label">Live Project</p>
+                <p class="meta-value"><a href="{{ project.project_url }}" target="_blank">Visit Site →</a></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main Image -->
+    <div class="main-image-container">
+        <img src="{{ project.main_image.url }}" alt="{{ project.title }}">
+    </div>
+
+    <!-- Description -->
+    <div class="description-section">
+        <h2>About This Project</h2>
+        <p>{{ project.description }}</p>
+    </div>
+
+    <!-- Gallery -->
+    {% if gallery_images %}
+    <div class="gallery-section">
+        <h2>Project Gallery</h2>
+        <div class="gallery-grid">
+            {% for img in gallery_images %}
+            <div class="gallery-item">
+                <img src="{{ img.image.url }}" alt="{{ img.caption }}">
+                {% if img.caption %}
+                <div class="gallery-caption">{{ img.caption }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+        <h2>Like What You See?</h2>
+        <p>Let's work together on your next project.</p>
+        <a href="{% url 'contact' %}" class="cta-button">
+            Get in Touch
+        </a>
+    </div>
+</div>
+{% endblock %}
